@@ -1,0 +1,11 @@
+node js =platform or environ to allow javascript to run outside the browser,asyncghrous
+
+
+onsole.log("a");         
+setTimeout(()=>console.log("b"),0);    asnyhronous   
+console.log("c");
+
+output:
+a
+c
+b
