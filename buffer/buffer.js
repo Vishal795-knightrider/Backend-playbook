@@ -1,0 +1,15 @@
+// Buffer creation by from       (we uses when we hv already have the data)
+// const buffer=Buffer.from("Hello World")
+// console.log(buffer)
+// console.log(buffer.toString())
+// console.log(buffer.length)
+// console.log(buffer[1])
+// console.log(String.fromCharCode(buffer[0]))
+
+
+// Buffer creation by alloc                   (this will create the empty  buffer of size 10)
+const buffer2=Buffer.alloc(10)
+buffer2.fill("Hello")
+console.log(buffer2.toString())
+buffer2.fill('l')
+console.log(buffer2.toString())  
