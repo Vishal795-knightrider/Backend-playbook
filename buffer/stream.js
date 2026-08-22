@@ -9,12 +9,18 @@ const writeStream=fs.createWriteStream('./Output.txt')
 // end
 // error
   
-readStream.on('data',(chunk)=>{
-    console.log(chunk)
-    writeStream.write(chunk)
-})
+// readStream.on('data',(chunk)=>{
+//     console.log(chunk)
+//     writeStream.write(chunk)
+// })
 
-readStream.on('end',()=>{
-    console.log('End of file')
-    writeStream.close()
-})
+// readStream.on('end',()=>{
+//     console.log('End of file')
+//     writeStream.close()
+// })
+
+readStream.pipe(writeStream)       //pipe b/w readstream and write srtrem
+
+writeStream.on("finish",()=>{
+    console.log("End of Stream")
+}) 
