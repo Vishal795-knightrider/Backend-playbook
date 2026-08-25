@@ -1,1 +1,6 @@
 Hello this is vishal
+
+
+case '/file':
+const date=date.now 
+fs.append('./log.txt',date.now()$ req.url)
