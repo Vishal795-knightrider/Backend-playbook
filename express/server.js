@@ -27,34 +27,38 @@ app.get("/students/:id",(req,res)=>{
             message:"not found"
         })
     }
-    res.json(stud);
+    res.json(stud)
 })
 
-// app.post("/students/:id",(req,res)=>{
-//     const newStudent={
-//         id:students.length+1,
-//         name:req.body.name,
-//         course:req.body.course
-//     }
-//     students.push(newStudent)
+app.post("/students",(req,res)=>{
+    const newStud={
+        id:students.length+1,
+        name:req.body.name,
+        course:req.body.course
+    }
+    students.push(newStud)
 
-//     res.status(201).json({
-//         message:"student insert sucess",
-//         student:newStudent
-//     })
-// })
+    res.status(201).json({
+        message:"inseretd succes",
+        new_Student:newStud
+    })
+})
 
-// app.delete("/students/:id",(req,res)=>{
-//     const id=parseInt(req.params.id)
-//     const idx=students.findIndex(student=>student.id===id)
+app.delete("/students/:id",(req,res)=>{
+    const id =parseInt(req.params.id)
+    const idx=students.findIndex(student=>student.id===id)
+    if(idx==-1){
+        res.status(404).json({
+            message:"not foudn"
+        })
+    }
+    students.splice(idx,1)
+    res.json({
+        message:"deleted succes",
+        id:idx
+    })
+})
 
-//     if(idx==-1){
-//         res.status(404).json({
-//             message:"not found"
-//         })
-//     }
-//     students.splice(idx,1)
-// })
 
 app.listen(3000,()=>{
     console.log("okkk");
