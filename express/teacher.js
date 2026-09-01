@@ -62,6 +62,20 @@ app.post("/teachers",(req,res)=>{
   })
 })
 
+app.delete("/teachers/:id",(req,res)=>{
+  const id=parseInt(req.params.id)
+  const idx=teachers.findIndex(it=>it.id===id)
+  if(!idx){
+    res.status(404).json({
+      message:"data nto found"
+    })
+  }
+  teachers.splice(idx,1)
+  res.status(200).json({
+    message:"succesfully deleyted"
+  })
+})
+
 app.listen(3000,()=>{
   console.log("server is okkk")
 })
