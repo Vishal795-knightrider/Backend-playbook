@@ -93,6 +93,21 @@ app.put("/teachers/:id",(req,res)=>{
   })
 })
 
+app.patch("/teachers/:id",(req,res)=>{
+  const id=parseInt(req.params.id)
+  const teachFind=teachers.find(it=>it.id===id)
+  if(!teachFind){
+    res.status(404).json({
+      message:"Not found"
+    })
+  }
+  if(req.body.name!==undefined) teachFind.name=req.body.name
+  if(req.body.exp!==undefined) teachFind.exp=req.body.exp
+  if(req.body.depart!==undefined) teachFind.depart=req.body.depart
+  res.json(teachFind)
+
+})
+
 app.listen(3000,()=>{
   console.log("server is okkk")
 })
