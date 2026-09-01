@@ -65,7 +65,7 @@ app.post("/teachers",(req,res)=>{
 app.delete("/teachers/:id",(req,res)=>{
   const id=parseInt(req.params.id)
   const idx=teachers.findIndex(it=>it.id===id)
-  if(!idx){
+  if(idx==-1){
     res.status(404).json({
       message:"data nto found"
     })
@@ -73,6 +73,23 @@ app.delete("/teachers/:id",(req,res)=>{
   teachers.splice(idx,1)
   res.status(200).json({
     message:"succesfully deleyted"
+  })
+})
+
+app.put("/teachers/:id",(req,res)=>{
+  const id=parseInt(req.params.id)
+  const teachFind=teachers.find(it=>it.id===id)
+  if(!teachFind){
+    res.status(404).json({
+      message:"Not found"
+    })
+  }
+  teachFind.name=req.body.name
+  teachFind.exp=req.body.exp
+  teachFind.depart=req.body.depart
+  res.status(200).json({
+    message:"updated successfully",
+    updated_record:teachFind
   })
 })
 
