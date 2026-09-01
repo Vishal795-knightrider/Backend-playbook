@@ -12,12 +12,26 @@ let students=[
     id:2,
     name: "rohan",
     course: "bca"
+},
+{
+    id:3,
+    name:"rahul",
+    course:"btech"
 }
 ];
 
+//all students
 app.get("/students", (req, res) => {
     res.json(students)
 })
+
+//get students by course
+app.get('/search',(req,res)=>{
+    const course=req.query.course
+    const result=students.filter(st=>st.course.toLowerCase()===course.toLowerCase())
+    res.status(200).json(result)
+})
+
 
 app.get("/students/:id",(req,res)=>{
     const id=parseInt(req.params.id)
