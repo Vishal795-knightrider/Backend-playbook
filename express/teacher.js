@@ -1,6 +1,8 @@
 const express=require('express')
 const app=express()
 
+app.use(express.json())
+
 let teachers=[
 {
     id:1,
@@ -16,7 +18,7 @@ let teachers=[
 },
 {
     id:3,
-    name: "anuj",
+    name: "ritik",
     exp : 5,
     depart: "aiml"
 },
@@ -36,7 +38,7 @@ app.get("/",(req,res)=>{
 
 //teachers by id
 app.get("/teachers/:id",(req,res)=>{
-  const id=req.params.id
+  const id=parseInt(req.params.id)
   const teach=teachers.find(it=>it.id===id)
   if(!teach){
     res.status(404).json({
@@ -44,6 +46,20 @@ app.get("/teachers/:id",(req,res)=>{
     })
   }
   res.json(teach)
+})
+
+app.post("/teachers",(req,res)=>{
+  const newteach={
+    id:teachers.length+1,
+    name:req.body.name,
+    exp:req.body.exp,
+    depart:req.body.depart
+  }
+  teachers.push(newteach)
+  res.status(200).json({
+    message:"insert ho gya bhai",
+    inserted_record: newteach
+  })
 })
 
 app.listen(3000,()=>{
