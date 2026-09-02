@@ -82,7 +82,7 @@ router.put("/:id",(req,res)=>{
         })
     }
     studnt.name=req.body.name
-    studnt.course=req.body.name
+    studnt.course=req.body.course
     res.json(studnt)
 })
 
