@@ -20,7 +20,7 @@ let students=[
 ];
 
 //all students
-router.get("/students", (req, res) => {
+router.get("/", (req, res) => {
     res.json(students)
 })
 
@@ -32,7 +32,7 @@ router.get('/search',(req,res)=>{
 })
 
 
-router.get("/students/:id",(req,res)=>{
+router.get("/:id",(req,res)=>{
     const id=parseInt(req.params.id)
     const stud=students.find(student=>student.id===id)
     if(!stud){
@@ -43,7 +43,7 @@ router.get("/students/:id",(req,res)=>{
     res.json(stud)
 })
 
-router.post("/students",(req,res)=>{
+router.post("/",(req,res)=>{
     const newStud={
         id:students.length+1,
         name:req.body.name,
@@ -57,7 +57,7 @@ router.post("/students",(req,res)=>{
     })
 })
 
-router.delete("/students/:id",(req,res)=>{
+router.delete("/:id",(req,res)=>{
     const id =parseInt(req.params.id)
     const idx=students.findIndex(student=>student.id===id)
     if(idx==-1){
@@ -72,7 +72,7 @@ router.delete("/students/:id",(req,res)=>{
     })
 })
 
-router.put("/students/:id",(req,res)=>{
+router.put("/:id",(req,res)=>{
     const id=parseInt(req.params.id)
     const studnt=students.find(student=>student.id===id)
 
@@ -86,7 +86,7 @@ router.put("/students/:id",(req,res)=>{
     res.json(studnt)
 })
 
-router.patch("/students/:id",(req,res)=>{
+router.patch("/:id",(req,res)=>{
     const id=parseInt(req.params.id)
     const stud=students.find(student=>student.id===id)
     if(!stud){
@@ -100,6 +100,5 @@ router.patch("/students/:id",(req,res)=>{
     res.json(stud)
 })
 
-router.listen(3000,()=>{
-    console.log("okkk");
-})
+
+module.exports=router
