@@ -27,6 +27,26 @@ app.use("/student",(req,res,next)=>{
   console.log("requested Url",req.originalUrl)
 })
 
+app.get('student/:id',(req,res,next)=>{
+  if(req.params.id==='0')
+    next('route')
+  else
+    next()
+},
+(req,res)=>{
+  res.end('Regular Route')
+})
+
+app.get('/student/:id',(req,res)=>{
+  res.end('special route')
+})
+
+//Error handling Middleware
+app.use((err,req,res,next)=>{
+  console.log(err.stack)
+  res.status().send
+})
+
 app.listen(PORT,()=>{
   console.log("server okk")  
 })
