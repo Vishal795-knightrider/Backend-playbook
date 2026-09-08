@@ -1,3 +1,4 @@
+const checkrole=require("../Middleware/roleMiddleware")
 const express = require('express')   
 const router =express.Router()   
 
@@ -20,19 +21,19 @@ let students=[
 ];
 
 //all students
-router.get("/", (req, res) => {
+router.get("/",checkrole("student","teacher","admin"),(req, res) => {
     res.json(students)
 })
 
 //get students by course
-router.get('/search',(req,res)=>{
+router.get('/search',checkrole("student","teacher","admin"),(req,res)=>{
     const course=req.query.course
     const result=students.filter(st=>st.course.toLowerCase()===course.toLowerCase())
     res.status(200).json(result)
 })
 
 
-router.get("/:id",(req,res)=>{
+router.get("/:id",checkrole("student","teacher","admin"),(req,res)=>{
     const id=parseInt(req.params.id)
     const stud=students.find(student=>student.id===id)
     if(!stud){
@@ -43,7 +44,7 @@ router.get("/:id",(req,res)=>{
     res.json(stud)
 })
 
-router.post("/",(req,res)=>{
+router.post("/",checkrole("teacher","admin"),(req,res)=>{
     const newStud={
         id:students.length+1,
         name:req.body.name,
@@ -57,7 +58,7 @@ router.post("/",(req,res)=>{
     })
 })
 
-router.delete("/:id",(req,res)=>{
+router.delete("/:id",checkrole("admin"),(req,res)=>{
     const id =parseInt(req.params.id)
     const idx=students.findIndex(student=>student.id===id)
     if(idx==-1){
@@ -72,7 +73,7 @@ router.delete("/:id",(req,res)=>{
     })
 })
 
-router.put("/:id",(req,res)=>{
+router.put("/:id",checkrole("admin"),(req,res)=>{
     const id=parseInt(req.params.id)
     const studnt=students.find(student=>student.id===id)
 
@@ -86,7 +87,7 @@ router.put("/:id",(req,res)=>{
     res.json(studnt)
 })
 
-router.patch("/:id",(req,res)=>{
+router.patch("/:id",checkrole("admin"),(req,res)=>{
     const id=parseInt(req.params.id)
     const stud=students.find(student=>student.id===id)
     if(!stud){
