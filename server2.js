@@ -7,7 +7,7 @@ app.use(express.json())
 const PORT=process.env.PORT||3000
 const studentRoutes = require('./Routes/studentRoutes'); 
 
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URI)
 .then(()=>{
     console.log("database connected")
 })
@@ -25,6 +25,6 @@ mongoose.connect(process.env.MONGODB_URL)
 
 app.use('/students', studentRoutes); //jab incoming req ka url /students hoga express us req ko agee handle krne ke liye studentRoutes file ke hawale kr dega
 
-app.listen(3000, () => { 
+app.listen(PORT, () => { 
     console.log('server okkk'); 
 });

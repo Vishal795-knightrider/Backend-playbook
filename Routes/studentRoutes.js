@@ -1,27 +1,29 @@
 const checkrole=require("../Middleware/roleMiddleware")
 const express = require('express')   
-const router =express.Router()   
+const router =express.Router()  
+const Student=require('../models/studentmodel')
 
-let students=[
-{
-    id:1,
-    name: "vishal",
-    course: "Btech"
-},
-{
-    id:2,
-    name: "rohan",
-    course: "bca"
-},
-{
-    id:3,
-    name:"rahul",
-    course:"btech"
-}
-];
+// let students=[
+// {
+//     id:1,
+//     name: "vishal",
+//     course: "Btech"
+// },
+// {
+//     id:2,
+//     name: "rohan",
+//     course: "bca"
+// },
+// {
+//     id:3, 
+//     name:"rahul",
+//     course:"btech"
+// }
+// ];
 
 //all students
 router.get("/",checkrole("student","teacher","admin"),(req, res) => {
+    students=Student.find()
     res.json(students)
 })
 
