@@ -1,8 +1,20 @@
+require('dotenv').config()
 const express = require('express'); 
 const app = express(); 
+const mongoose=require('mongoose')
+app.use(express.json())
+
+const PORT=process.env.PORT||3000
 const studentRoutes = require('./Routes/studentRoutes'); 
 
-app.use(express.json()); 
+mongoose.connect(process.env.MONGODB_URL)
+.then(()=>{
+    console.log("database connected")
+})
+.catch((error)=>{
+    console.log("Database can not connected",error)
+})
+
 
 //Global routing  //global middlearw 
 // app.use((req,res,next)=>{
