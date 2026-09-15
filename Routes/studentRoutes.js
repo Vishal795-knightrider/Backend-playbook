@@ -144,18 +144,42 @@ router.delete("/:id",checkrole("admin"),(req,res)=>{
     })
 })
 
-router.put("/:id",checkrole("admin"),(req,res)=>{
-    const id=parseInt(req.params.id)
-    const studnt=students.find(student=>student.id===id)
+router.put("/:id",checkrole("admin"),
+async(req,res)=>{
 
-    if(!studnt){
-        res.status(404).json({
-            message:"not found"
-        })
+    // const id=parseInt(req.params.id)
+    // const studnt=students.find(student=>student.id===id)
+
+    // if(!studnt){
+    //     res.status(404).json({
+    //         message:"not found" 
+    //     })
+    // }
+    // studnt.name=req.body.name
+    // studnt.course=req.body.course
+    // res.json(studnt)
+
+    try {
+      const id = req.params.id;
+      const deletedStudent = await Student.findByIdAndDelete(id);
+
+      if (!deletedStudent) {
+        return res.status(404).json({
+          message: "not found"
+        });
+      }
+
+      res.json({
+        message: "deleted successfully",
+        student: deletedStudent
+      });
+
+    } catch (err) {
+      res.status(500).json({
+        message: err.message
+      });
     }
-    studnt.name=req.body.name
-    studnt.course=req.body.course
-    res.json(studnt)
+
 })
 
 router.patch("/:id",checkrole("admin"),(req,res)=>{
