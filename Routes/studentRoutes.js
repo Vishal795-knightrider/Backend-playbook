@@ -182,18 +182,45 @@ async(req,res)=>{
 
 })
 
-router.patch("/:id",checkrole("admin"),(req,res)=>{
-    const id=parseInt(req.params.id)
-    const stud=students.find(student=>student.id===id)
-    if(!stud){
-        res.status(404).json({
-            mesage:"not foudn"
-        })
-    }
-    if(req.body.name!==undefined) stud.name=req.body.name
-    if(req.body.course!==undefined) stud.course=req.body.course
+router.patch("/:id",checkrole("admin"),
+async(req,res)=>{
 
-    res.json(stud)
+    // const id=parseInt(req.params.id)
+    // const stud=students.find(student=>student.id===id)
+    // if(!stud){
+    //     res.status(404).json({
+    //         mesage:"not foudn"
+    //     })
+    // }
+    // if(req.body.name!==undefined) stud.name=req.body.name
+    // if(req.body.course!==undefined) stud.course=req.body.course
+
+    // res.json(stud)
+
+    try {
+      const id = req.params.id;
+      const updatedStudent = await Student.findByIdAndUpdate(
+        id,
+        req.body,
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+
+      if (!updatedStudent) {
+        return res.status(404).json({
+          message: "not found"
+        });
+      }
+      res.json(updatedStudent);
+
+    } catch (err) {
+      res.status(500).json({
+        message: err.message
+      });
+    }
+    
 })
 
 
