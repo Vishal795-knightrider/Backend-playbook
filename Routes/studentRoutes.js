@@ -44,6 +44,7 @@ router.get('/search',checkrole("student","teacher","admin"),(req,res)=>{
 })
 
 
+
 // router.get("/:id",checkrole("student","teacher","admin"),(req,res)=>{
     // const id=parseInt(req.params.id)
     // const stud=students.find(student=>student.id===id)
@@ -73,6 +74,8 @@ router.get("/:id",checkrole("student", "teacher", "admin"),
     }
   }
 );
+
+
 
 router.post("/",checkrole("teacher","admin"),
 async(req,res)=>{
@@ -129,20 +132,49 @@ async(req,res)=>{
     }     
 })
 
-router.delete("/:id",checkrole("admin"),(req,res)=>{
-    const id =parseInt(req.params.id)
-    const idx=students.findIndex(student=>student.id===id)
-    if(idx==-1){
-        res.status(404).json({
-            message:"not foudn"
-        })
+
+
+router.delete("/:id",checkrole("admin"),
+async(req,res)=>{
+
+    // const id =parseInt(req.params.id)
+    // const idx=students.findIndex(student=>student.id===id)
+    // if(idx==-1){
+    //     res.status(404).json({
+    //         message:"not foudn"
+    //     })
+    // }
+    // students.splice(idx,1)
+    // res.json({
+    //     message:"deleted succes",
+    //     student:students
+    // })
+
+    try {
+      const id = req.params.id;
+      const deletedStudent = await Student.findByIdAndDelete(id);
+
+      if (!deletedStudent) {
+        return res.status(404).json({
+          message: "not found"
+        });
+      }
+
+      res.json({
+        message: "deleted successfully",
+        student: deletedStudent
+      });
+
     }
-    students.splice(idx,1)
-    res.json({
-        message:"deleted succes",
-        student:students
-    })
+    catch(err){
+      res.status(500).json({
+        message: err.message
+      });
+    }
+
 })
+
+
 
 router.put("/:id",checkrole("admin"),
 async(req,res)=>{
