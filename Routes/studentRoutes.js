@@ -22,10 +22,19 @@ const Student=require('../models/studentmodel')
 // ];
 
 //all students
-router.get("/",checkrole("student","teacher","admin"),(req, res) => {
-    students=Student.find()
-    res.json(students)
-})
+router.get("/",checkrole("student", "teacher", "admin"),
+  async (req, res)=>{
+    try{
+      const students = await Student.find();
+      res.json(students);
+    } 
+    catch(err){
+      res.status(404).json({
+        message: err.message
+      });
+    }
+  }
+);
 
 //get students by course
 router.get('/search',checkrole("student","teacher","admin"),(req,res)=>{
@@ -35,29 +44,68 @@ router.get('/search',checkrole("student","teacher","admin"),(req,res)=>{
 })
 
 
-router.get("/:id",checkrole("student","teacher","admin"),(req,res)=>{
-    const id=parseInt(req.params.id)
-    const stud=students.find(student=>student.id===id)
-    if(!stud){
-        res.status(404).json({
-            message:"not found"
-        })
+// router.get("/:id",checkrole("student","teacher","admin"),(req,res)=>{
+    // const id=parseInt(req.params.id)
+    // const stud=students.find(student=>student.id===id)
+    // if(!stud){
+    //     res.status(404).json({           //without async or await try catch
+    //         message:"not found"
+    //     })
+    // }
+    // res.json(stud)
+
+router.get("/:id",checkrole("student", "teacher", "admin"),
+  async(req, res)=>{
+    try{
+      const id=req.params.id;
+      const stud = await Student.findById(id);
+      if (!stud) {
+        return res.status(404).json({
+          message: "not found"
+        });
+      }
+      res.json(stud);
+
+    }catch(err){
+      res.status(500).json({
+        message: err.message
+      });
     }
-    res.json(stud)
-})
+  }
+);
 
 router.post("/",checkrole("teacher","admin"),(req,res)=>{
-    const newStud={
-        id:students.length+1,
-        name:req.body.name,
-        course:req.body.course
-    }
-    students.push(newStud)
+    // const newStud={
+    //     id:students.length+1,     //yeh database se pehle wala code hai
+    //     name:req.body.name,
+    //     course:req.body.course
+    // }
+    // students.push(newStud)
 
-    res.status(201).json({
-        message:"inseretd succes",
-        new_Student:newStud
-    })
+    // res.status(201).json({
+    //     message:"inseretd succes",
+    //     new_Student:newStud
+    // })
+
+    const student = new Student({
+      user: req.body.user,
+      age: req.body.age,
+      course: req.body.course
+    });
+
+    student.save()
+      .then((savedStudent) => {
+        res.status(201).json({
+          message: "Student created successfully",
+          data: savedStudent
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          message: err.message
+        })
+      })
+      
 })
 
 router.delete("/:id",checkrole("admin"),(req,res)=>{
