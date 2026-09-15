@@ -74,7 +74,9 @@ router.get("/:id",checkrole("student", "teacher", "admin"),
   }
 );
 
-router.post("/",checkrole("teacher","admin"),(req,res)=>{
+router.post("/",checkrole("teacher","admin"),
+async(req,res)=>{
+
     // const newStud={
     //     id:students.length+1,     //yeh database se pehle wala code hai
     //     name:req.body.name,
@@ -87,25 +89,44 @@ router.post("/",checkrole("teacher","admin"),(req,res)=>{
     //     new_Student:newStud
     // })
 
-    const student = new Student({
-      user: req.body.user,
-      age: req.body.age,
-      course: req.body.course
-    });
+    // const student = new Student({
+    //   user: req.body.user,
+    //   age: req.body.age,
+    //   course: req.body.course
+    // });
 
-    student.save()
-      .then((savedStudent) => {
-        res.status(201).json({
-          message: "Student created successfully",
-          data: savedStudent
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          message: err.message
-        })
-      })
-      
+    // student.save()
+    //   .then((savedStudent) => {
+    //     res.status(201).json({
+    //       message: "Student created successfully",        //yeh databse ke baad wala
+    //       data: savedStudent
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     res.status(400).json({
+    //       message: err.message
+    //     })
+    //   })       
+
+    try {
+      const student = new Student({
+        user: req.body.user,
+        age: req.body.age,
+        course: req.body.course
+      });
+
+      const savedStudent = await student.save();
+
+      res.status(201).json({
+        message: "Student created successfully",
+        data: savedStudent
+      });
+
+    } catch (err) {
+      res.status(400).json({
+        message: err.message
+      });
+    }     
 })
 
 router.delete("/:id",checkrole("admin"),(req,res)=>{
