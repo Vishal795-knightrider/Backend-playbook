@@ -2,7 +2,7 @@ const express=require('express')
 const router =express.Router()
 
 router.get("/area",(req,res)=>{
-  const len=Number(req.query.length)
+  const len=parseInt(req.query.length)
   const breadth=parseInt(req.query.breadth)
   const area=len*breadth
   res.json({area})
