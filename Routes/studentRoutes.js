@@ -37,11 +37,11 @@ router.get("/",checkrole("student", "teacher", "admin"),
 );
 
 //get students by course
-router.get('/search',checkrole("student","teacher","admin"),(req,res)=>{
-    const course=req.query.course
-    const result=students.filter(st=>st.course.toLowerCase()===course.toLowerCase())
-    res.status(200).json(result)
-})
+// router.get('/search',checkrole("student","teacher","admin"),(req,res)=>{
+//     const course=req.query.course
+//     const result=students.filter(st=>st.course.toLowerCase()===course.toLowerCase())
+//     res.status(200).json(result)
+// })
 
 
 
@@ -192,27 +192,22 @@ async(req,res)=>{
     // res.json(studnt)
 
     try {
-      const id = req.params.id;
-      const deletedStudent = await Student.findByIdAndDelete(id);
-
-      if (!deletedStudent) {
-        return res.status(404).json({
-          message: "not found"
-        });
-      }
-
-      res.json({
-        message: "deleted successfully",
-        student: deletedStudent
-      });
-
-    } catch (err) {
-      res.status(500).json({
-        message: err.message
-      });
+    const id = req.params.id;
+    const updatedStudent = await Student.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, overwrite: true, runValidators: true }
+    );
+ 
+    if (!updatedStudent) {
+      return res.status(404).json({ message: "not found" });
     }
 
-})
+    res.json({ message: "Student fully updated", student: updatedStudent });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 router.patch("/:id",checkrole("admin"),
 async(req,res)=>{
