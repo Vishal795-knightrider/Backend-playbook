@@ -45,6 +45,7 @@ router.get('/:id',(req,res)=>{
   })
 })
 
+//add contact
 router.post('/add',(req,res)=>{
   const newCon={
     id:Contacts.length+1,
@@ -59,19 +60,73 @@ router.post('/add',(req,res)=>{
   })
 })
 
-router.delete('/delete/id',(req,res)=>{
+//delete contact
+router.delete('/delete/:id',(req,res)=>{
   const id=parseInt(req.params.id)
-  const check=Contacts.find(check=>check.id===id)
-  if(id==-1){
-    return res.json({
-      message:"not found"
+  const check=Contacts.find(i=>i.id===id)
+
+  if(!check){
+    return res.status(404).json({
+      message:"contact not found"
     })
   }
-  Contacts.splice(id,1)
-  return 
 
+  Contacts.splice(Contacts.indexOf(check),1)
+
+  return res.json({
+    message:"contact successfully deleted",
+    check
+  })
 })
 
+//put contact
+router.put('/:id',(req,res)=>{
+  const id=parseInt(req.params.id)
+  const check=Contacts.find(i=>i.id===id)
 
-router.put('/')
+  if(!check){
+    return res.status(404).json({
+      message:"contact not found"
+    })
+  }
+
+  check.name=req.body.name
+  check.email=req.body.email
+  check.phone=req.body.phone
+
+  return res.json({
+    message:"contact successfully updated",
+    check
+  })
+})
+
+//patch contact
+router.patch('/:id',(req,res)=>{
+  const id=parseInt(req.params.id)
+  const check=Contacts.find(i=>i.id===id)
+
+  if(!check){
+    return res.status(404).json({
+      message:"contact not found"
+    })
+  }
+
+  if(req.body.name){
+    check.name=req.body.name
+  }
+
+  if(req.body.email){
+    check.email=req.body.email
+  }
+
+  if(req.body.phone){
+    check.phone=req.body.phone
+  }
+
+  return res.json({
+    message:"contact successfully updated",
+    check
+  })
+})
+
 module.exports=router
