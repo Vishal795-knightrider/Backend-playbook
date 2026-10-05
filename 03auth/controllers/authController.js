@@ -1,4 +1,4 @@
-const jwt=require("../util.js/jwt") 
+const jwt=require("../utils.js/jwt") 
 
 
 const registeredUser=()=>{
