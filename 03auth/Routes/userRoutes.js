@@ -32,7 +32,7 @@ router.post('/createUser',async(req,res)=>{
 
 router.post('/login',async(req,res)=>{
     try {
-        const {email, password}=req.body
+        const {email,password}=req.body
         if(!email || !password) res.status(400).json({message: "email and password are required"});
 
         const ExistingUser = await User.findOne({email:email})
@@ -45,7 +45,7 @@ router.post('/login',async(req,res)=>{
             username: ExistingUser.username,
             email:ExistingUser.email
         }})
-    } catch (error) {
+    } catch(error){
         res.status(400).json({message:"error occured during login"});
     }
 })

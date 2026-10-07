@@ -14,4 +14,18 @@ const generateToken=(user)=>{
   )
 }
 
+const generateTokenRefresh=(user)=>{
+    jwt.sign(
+        {
+            id:user._id
+        },
+    process.env.SECRET_KEY,
+    {
+        expiresIn:"1h"
+    }
+    )
+}
+
+
 module.exports=generateToken
+module.exports=generateTokenRefresh

@@ -5,9 +5,8 @@ const bcrypt=require('bcrypt')
 //user Registration
 const registeredUser=async(req,res)=>{
     try{
-        const{username,email,password,role}=req.body
-        if(!username||!email||!password)
-        {
+        const {username,email,password,role}=req.body
+        if(!username||!email||!password){
             return res.status(400).json({message:"All fields required"})
         }
 
@@ -36,7 +35,7 @@ const registeredUser=async(req,res)=>{
             role:user.role
         }
         })
-    } catch(error){
+    }catch(error){
         console.error(error)
         return res.status(500).json({message:"registration failed"})
     }
@@ -44,28 +43,28 @@ const registeredUser=async(req,res)=>{
 }
 
 //Login flow
-const loginUser = async (req, res) => {
+const loginUser =async(req, res)=>{
     try {
-        const { email, password } = req.body;
-// checking if field is empty
+        const {email,password} = req.body;
+
+        // checking if field is empty
         if (!email || !password) {
             return res.status(400).json({
                 message: "Email and password are required"
             });
         }
-//loooking for user existence
+        //looking for user existence
         const user = await User.findOne({ email });
-//if user not found
+        //if user not found
         if (!user) {
             return res.status(401).json({
                 message: "Invalid email or password"
             });
         }
-//comparing hashed password with provided one
-        const isPasswordCorrect =
-            await bcrypt.compare(password, user.password);
+        //comparing hashed password with provided one
+        const isPassCorrect =await bcrypt.compare(password, user.password);
 
-        if (!isPasswordCorrect) {
+        if (!isPassCorrect) {
             return res.status(401).json({
                 message: "Invalid email or password"
             });
@@ -73,8 +72,9 @@ const loginUser = async (req, res) => {
 
       
 //calling token generator function
-
 const token=generateToken(user)
+
+const refreshToken=generateTokenRefresh(user)
 //sending cookie as response
 res.cookie("token",token,{
     httpOnly:true,
@@ -83,7 +83,6 @@ res.cookie("token",token,{
     maxAge:60*60*100
 
 })
-
         return res.status(200).json({
             message: "Login successful",
             user: {

@@ -14,7 +14,6 @@ const generateTokenAccess=(user)=>{
 const generateTokenRefresh=(user)=>{
     jwt.sign(
         {
-           
             id:user._id
         },
     process.env.SECRET_KEY,
@@ -26,3 +25,4 @@ const generateTokenRefresh=(user)=>{
 
 
 module.exports=generateTokenAccess
+module.exports=generateTokenRefresh
