@@ -1,28 +1,16 @@
 const jwt=require("jsonwebtoken")
-const generateTokenAccess=(user)=>{
-    jwt.sign(
-        {
-            role:user.role,
-            id:user._id
-        },
-    process.env.SECRET_KEY,
-    {
-        expiresIn:"1h"
-    }
-    )
+const authMiddleware=(req,res,next)=>{
+try{
+    const {token}=req.cookies
+    if(!token)
+        return res.status.json({message:""})
+    const check=jwt.verify(token,process.env.SECRET_KEY)
+    req.user=check
 }
-const generateTokenRefresh=(user)=>{
-    jwt.sign(
-        {
-            id:user._id
-        },
-    process.env.SECRET_KEY,
-    {
-        expiresIn:"1h"
-    }
-    )
+catch(error){
+    console.log(error)
+    return res.status().json({})
+}
 }
 
-
-module.exports=generateTokenAccess
-module.exports=generateTokenRefresh
+module.exports=authMiddleware
