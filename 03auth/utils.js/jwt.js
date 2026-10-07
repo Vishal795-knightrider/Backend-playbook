@@ -1,7 +1,7 @@
 require('dotenv').config()
-
 const jwt=require('jsonwebtoken')
-const getToken=(user)=>{
+
+const generateToken=(user)=>{
   jwt.sign(
     {
       user:user.email,               //payload is encoded not encryted that's why we dont use importnat info here
@@ -14,4 +14,4 @@ const getToken=(user)=>{
   )
 }
 
-module.exports=getToken
+module.exports=generateToken
