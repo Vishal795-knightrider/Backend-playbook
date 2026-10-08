@@ -21,11 +21,10 @@ const generateTokenRefresh=(user)=>{
         },
     process.env.SECRET_KEY,
     {
-        expiresIn:"1h"
+        expiresIn:"7h"
     }
     )
 }
 
 
-module.exports=generateToken
-module.exports=generateTokenRefresh
+module.exports = { generateToken, generateTokenRefresh };

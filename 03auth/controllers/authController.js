@@ -73,8 +73,11 @@ const loginUser =async(req, res)=>{
       
 //calling token generator function
 const token=generateToken(user)
-
 const refreshToken=generateTokenRefresh(user)
+
+user.refreshToken=refreshToken          //refresh token ko database me save kiya
+await user
+
 //sending cookie as response
 res.cookie("token",token,{
     httpOnly:true,
@@ -83,24 +86,33 @@ res.cookie("token",token,{
     maxAge:60*60*100
 
 })
-        return res.status(200).json({
-            message: "Login successful",
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            message: "Login failed"
-        });
-    }
+
+res.cookie("refreshToken", refreshToken,{
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge:7*60*60*1000
+    });
+    
+    return res.status(200).json({
+        message: "Login successful",
+        user:{
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role
+        }
+    });
+}
+catch(error){
+    console.error(error);
+    return res.status(500).json({
+    message: "Login failed"
+});
+}
 };
 
-const logout = async(req , res)=>{
+const logout = async(req,res)=>{
     const token = req.cookies.token;
     if(!token){
         return res.status(400).json({

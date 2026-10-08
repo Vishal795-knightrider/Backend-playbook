@@ -5,7 +5,7 @@ const userSchema=mongoose.Schema({
         required:true
     },
     email:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
 
@@ -18,6 +18,10 @@ const userSchema=mongoose.Schema({
         type:String,
         enum:['student','admin','teacher'],
         default:'student'
+    },
+    refreshToken:{
+        type:String,
+        default:null
     }
 })
 
