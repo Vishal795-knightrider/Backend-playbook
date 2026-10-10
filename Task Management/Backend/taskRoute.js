@@ -1,14 +1,24 @@
 const express=require('express')
 const router=express.Router()
-let tasks=[
+
+let tasks = [
   {
-    id:1,
-    title:"dsa"
-  },{
-    id:2,
-    title:"dev"
+    id: 1,
+    title: 'DSA'
+  },
+  {
+    id: 2,
+    title: 'Dev'
+  },
+  {
+    id:3,
+    title:'CN'
+  },
+  {
+    id:4,
+    title:"DBMs"
   }
-]
+];
 
 
 router.get('/api/task',(req,res)=>{
