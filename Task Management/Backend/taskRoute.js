@@ -19,6 +19,7 @@ let tasks = [
     title:"DBMs"
   }
 ];
+let taskid=5;
 
 
 router.get('/api/task',(req,res)=>{
@@ -30,7 +31,7 @@ router.post('/api/task',(req,res)=>{
 
   if(!title||!title.trim()){
     return res.status(400).json({
-      message: 'title mandoatoru'
+      message: 'title mandatory'
     });
   }
 
@@ -55,7 +56,7 @@ router.delete('/api/task/:id',(req,res)=>{
   if(idx===-1){
     return res.status(404).json({message: 'Task not found'});
   }
-  tasks.splice(index, 1);
+  tasks.splice(idx, 1);
   res.status(200).json({message: 'Task deleted successfully'});
 })
 
