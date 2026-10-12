@@ -1,11 +1,14 @@
-const express=require('express')
-const app=express()
+const express = require('express');
+const cors = require('cors');
 
-const taskroute=require('./taskRoute')
-app.use(json())
+const app = express();
+const taskroute = require('./taskRoute');
 
-app.use('/',taskroute)
+app.use(cors());
+app.use(express.json());
 
-app.listen(3000,(req,res)=>{
-  console.log("server okk")
-})
+app.use('/', taskroute);
+
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
