@@ -17,16 +17,27 @@ function App(){
     getTasks();
   },[])
 
-  const addTasks=async(e)=>{
-  e.preventDefault()
+  const addTasks = async(e)=>{
+  e.preventDefault();
+
   if(!title.trim()) return;
+  try{
+    const res = await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ title })});
+    const data = await res.json();
 
-  const res =await fetch(API,{method:"POST",headers:{"Content-type":"application/json"},
-  body:JSON.stringify({title})})
+    if (!res.ok){
+      alert(data.message||"Failed to add task");
+      return;
+    }
 
-  setTitle('')
-  getTasks();
+    setTitle("");
+    await getTasks();
+
+  }catch(error){
+    console.error(error);
+    console.error('Frontend POST error:', error);
   }
+};
 
   const delTasks =async(id)=>{
   const res= await fetch(`${API}/${id}`,{method:'DELETE'});
@@ -50,9 +61,9 @@ function App(){
 
       <ul>
         {tasks.map((task) => (
-          <li key={task.id}>
+          <li key={task._id}>
             <span>{task.title}</span>
-            <button onClick={() => delTasks(task.id)}>
+            <button onClick={()=>delTasks(task._id)}>
               Delete
             </button>
           </li>
