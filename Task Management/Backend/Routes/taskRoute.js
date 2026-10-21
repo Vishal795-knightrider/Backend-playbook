@@ -1,10 +1,15 @@
 const express=require('express')
+const mongoose = require('mongoose');
+
 const router=express.Router()
 const Tasks=require("../Models/taskSchema")
+const User=require("../Models/userSchema")
 
 router.get('/api/task',async(req,res)=>{
   try {
-    const tasks = await Tasks.find();
+    const tasks = await Tasks.find()
+    .populate('userId','name','email');
+
     res.status(200).json(tasks);
   }
   catch(error){
