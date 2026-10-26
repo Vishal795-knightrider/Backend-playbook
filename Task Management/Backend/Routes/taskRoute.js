@@ -3,21 +3,48 @@ const mongoose = require('mongoose');
 
 const router=express.Router()
 const Tasks=require("../Models/taskSchema")
-const User=require("../Models/userSchema")
+const User=require("../Models/userSchema");
+const tasks = require('../Models/taskSchema');
 
 router.get('/api/task',async(req,res)=>{
-  try {
-    const tasks = await Tasks.find()
-    .populate('userId','name','email');
 
-    res.status(200).json(tasks);
-  }
-  catch(error){
-    res.status(500).json({
-      message: "Error fetching Tasks",
-      error: error.message
-    });
-  }
+  const page=parseInt(req.query.page,10) ||1           ///,10 signifies number system like thr the np. we  taking shou;b ebe decimal no. 
+  const limit =parseInt(req.query.limit,10) || 10
+
+  const sanitizePage=page>1?page:1
+  const sanitizeLimit=limit<1?10:limit
+  const skip=(sanitizePage-1)*sanitizeLimit
+
+  const {task,totalTask}=await Promise.all([
+    Tasks.find().populate("User","name","email").sort({createdAt:-1}).skip(skip).limit(sanitizeLimit),
+    Tasks.countDocument()
+  ])
+
+  const totalPages=Math.ceil(totalTask/sanitizelimit)
+
+  res.status(200).josn({
+    metadata:{
+      totalTask,
+      totalPages,
+      currentPage:sanitizePage,
+      hasPrevious:sanitizePage>1,
+      hasNext:sanitizePage<totalPages
+    }
+  })
+
+
+
+
+  // try {
+  //   const tasks = await Tasks.find().populate('userId','name','email');    //.populate ka matlau us ref table me se konsa colummn chsnahiey
+  //   res.status(200).json(tasks);
+  // }
+  // catch(error){
+  //   res.status(500).json({
+  //     message: "Error fetching Tasks",
+  //     error: error.message
+  //   });
+  // }
 })
 
 router.post('/api/task',async(req,res)=>{
