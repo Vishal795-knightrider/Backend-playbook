@@ -1,3 +1,5 @@
+const rateLimit=require("express-rate-limit")
+
 const path = require('path');
 require('dotenv').config({
   path: path.resolve(__dirname,'../.env')
@@ -10,6 +12,11 @@ const PORT=process.env.PORT||3000
 
 
 const app = express();
+const limit=ratelimit({
+  windowMs:15*60*1000,
+  max:15,
+  message:"you have exceeded hit limits of API"
+})
 const taskroute = require('./Routes/taskRoute');
 
 mongoose.connect(process.env.MONGO_URI)     //it return a promise

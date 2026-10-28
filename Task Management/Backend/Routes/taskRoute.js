@@ -6,10 +6,10 @@ const Tasks=require("../Models/taskSchema")
 const User=require("../Models/userSchema");
 const tasks = require('../Models/taskSchema');
 
-router.get('/api/task',async(req,res)=>{
 
+router.get('/api/task',async(req,res)=>{
   const page=parseInt(req.query.page,10) ||1           ///,10 signifies number system like thr the np. we  taking shou;b ebe decimal no. 
-  const limit =parseInt(req.query.limit,10) || 10
+  const limit =parseInt(req.query.limit,10) ||10
 
   const sanitizePage=page>1?page:1
   const sanitizeLimit=limit<1?10:limit
@@ -49,7 +49,7 @@ router.get('/api/task',async(req,res)=>{
 
 router.post('/api/task',async(req,res)=>{
   try{
-    const {title}=req.body;
+    const {title,task}=req.body;
     
     if(typeof title!=='string'||!title.trim()){
       return res.status(400).json({
@@ -103,4 +103,44 @@ router.delete('/api/task/:id',async(req, res)=>{
   }
 });
 
-module.exports=router
+
+
+
+router.get('/api/task',async(req,res)=>{
+  const limit=parseInt(req.query.limit);
+  const sanitizeLimit=limit<1?10:limit
+
+  const {nextCursor}=req.query
+  const query={}
+
+  if(nextCursor)     //next cursor me value iska matlan uski query change krni hai
+  if(!mongoose.isValidObjectId){ 
+    return res.status().json({
+      success:false,
+
+    })
+  }
+  query._id={lt$:new mongoose}
+
+
+  const task=Task.find(query).sort({id:-1}).limit(limit+1)
+
+  const hasNext=task.length>sanitizedLimit
+
+  if(hasNext)
+  task.pop()
+
+  const lastitem=task[task.lenght-1]
+  const newCursor=hasNext&&lastitem?lastitem.id:null
+
+  res.status().json({
+    success:true,  
+    metadata:{
+      limit:santizelimit,
+      nextCursor
+    },
+    data:task
+  })
+})
+
+
