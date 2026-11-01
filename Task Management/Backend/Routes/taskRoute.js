@@ -49,7 +49,7 @@ router.get('/api/task',async(req,res)=>{
 
 router.post('/api/task',async(req,res)=>{
   try{
-    const {title,task}=req.body;
+    const {title,task,userId}=req.body;
     
     if(typeof title!=='string'||!title.trim()){
       return res.status(400).json({
@@ -57,20 +57,45 @@ router.post('/api/task',async(req,res)=>{
       });
     }
 
-    const newTask =new Tasks({
-      title:title.trim()
-    });
-    const saveTask = await newTask.save();
+    if(typeof task!=='string' || !task.trim()){
+      return res.status(400).json({
+        message:"task desc is mandtoru"
+      })
+    }
+
+    if(!userId || !mongoose.Types.ObjectId.isValid(userId)){
+      return res.status(400).json({
+        message: "valid userid required"
+      })
+    }
+
+    const user=await User.findById(userId);
+
+    if(!user){
+      return res.status(404).json({
+        message:"user not found"
+      })
+    }
+
+    const newTask=new Task({
+      title:title.trim(),
+      task:task.trim(),
+      userId:user._id
+    })
+
+    const savedTask=await newTask.save();
 
     res.status(201).json({
-      message: 'Task added successfully',
-      task: saveTask
-    });
-  }catch(err){
+      message:"task added successfully",
+      task:savedTask
+    })
+  }
+
+  catch(error){
     res.status(500).json({
-      message: 'error whiel ading task',
-      error: err.message
-    });
+      message:"error on adding task",
+      error:err.message
+    })
   }
 });
 
