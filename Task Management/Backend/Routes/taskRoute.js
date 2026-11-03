@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const router=express.Router()
 const Tasks=require("../Models/taskSchema")
 const User=require("../Models/userSchema");
-const tasks = require('../Models/taskSchema');
 
 
 router.get('/api/task',async(req,res)=>{
