@@ -1,0 +1,1 @@
+const {validateResult}=require('express-validator')
